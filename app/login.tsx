@@ -5,12 +5,14 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { defaultStyles } from "@/constants/Styles";
 import Colors from "@/constants/Colors";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { isClerkAPIResponseError, useSignIn } from "@clerk/clerk-expo";
 
 enum LoginType {
   Mobile,
@@ -20,12 +22,48 @@ enum LoginType {
 }
 
 const login = () => {
+  useEffect(() => {
+    console.log("login");
+  }, []);
+
   const [countryCode, setCountryCode] = useState("+91");
   const [mobileNumber, setMobileNumber] = useState("");
+  const router = useRouter();
+  const { signIn } = useSignIn();
 
-  const handleLogin = (type: LoginType) => {
+  const handleLogin = async (type: LoginType) => {
     if (type === LoginType.Mobile) {
-      console.log("mobile");
+      try {
+        const fullNumber = `${countryCode}${mobileNumber}`;
+        const { supportedFirstFactors } = await signIn!.create({
+          identifier: fullNumber,
+        });
+
+        const firstPhoneFactor: any = supportedFirstFactors.find(
+          (factor: any) => {
+            return factor.strategy === "phone_code";
+          }
+        );
+
+        const { phoneNumberId } = firstPhoneFactor;
+
+        await signIn!.prepareFirstFactor({
+          strategy: "phone_code",
+          phoneNumberId,
+        });
+
+        router.push({
+          pathname: "/verify/[phone]",
+          params: { phone: fullNumber, signin: "true" },
+        });
+      } catch (error) {
+        console.log("error", JSON.stringify(error, null, 2));
+        if (isClerkAPIResponseError(error)) {
+          if (error.errors[0].code === "phone_number_already_verified") {
+            Alert.alert("Phone Number Already Verified");
+          }
+        }
+      }
     }
   };
 

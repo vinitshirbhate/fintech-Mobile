@@ -9,11 +9,32 @@ import {
 import React, { useState } from "react";
 import { defaultStyles } from "@/constants/Styles";
 import Colors from "@/constants/Colors";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { useSignUp } from "@clerk/clerk-expo";
 
 const signup = () => {
   const [countryCode, setCountryCode] = useState("+91");
   const [mobileNumber, setMobileNumber] = useState("");
+  const router = useRouter();
+
+  const { signUp } = useSignUp();
+
+  const handleSignUp = async () => {
+    const fullNumber = `${countryCode}${mobileNumber}`;
+    try {
+      await signUp!.create({
+        phoneNumber: fullNumber,
+      });
+      signUp?.preparePhoneNumberVerification();
+      router.push({
+        pathname: "/verify/[phone]",
+        params: { phone: fullNumber },
+      });
+    } catch (error) {
+      console.error("error", JSON.stringify(error, null, 2));
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -28,7 +49,7 @@ const signup = () => {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Country Code"
+            placeholder="C Code"
             placeholderTextColor={Colors.gray}
             value={countryCode}
           />
@@ -55,7 +76,7 @@ const signup = () => {
             mobileNumber !== "" ? styles.enable : styles.disable,
             { marginBottom: 20 },
           ]}
-          onPress={() => console.log("signup")}
+          onPress={handleSignUp}
         >
           <Text style={defaultStyles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
