@@ -17,19 +17,19 @@ const DropDownList = () => {
         sideOffset={5}
       >
         <DropdownMenu.Item key="statement">
-          <DropdownMenu.ItemIcon androidIconName="format_list_bulleted" />
+          <DropdownMenu.ItemIcon />
           <DropdownMenu.ItemTitle>statement</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>
         <DropdownMenu.Item key="converter">
-          <DropdownMenu.ItemIcon androidIconName="format_list_bulleted" />
+          <DropdownMenu.ItemIcon />
           <DropdownMenu.ItemTitle>Converter</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>
         <DropdownMenu.Item key="background">
-          <DropdownMenu.ItemIcon androidIconName="format_list_bulleted" />
+          <DropdownMenu.ItemIcon />
           <DropdownMenu.ItemTitle>Background</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>
         <DropdownMenu.Item key="account">
-          <DropdownMenu.ItemIcon androidIconName="format_list_bulleted" />
+          <DropdownMenu.ItemIcon />
           <DropdownMenu.ItemTitle>Account</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>
       </DropdownMenu.Content>

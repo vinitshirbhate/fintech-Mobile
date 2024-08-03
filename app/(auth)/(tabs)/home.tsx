@@ -1,14 +1,21 @@
 import { View, Text, ScrollView, StyleSheet, Button } from "react-native";
-import React from "react";
-import { defaultStyles } from "@/constants/Styles";
 import Colors from "@/constants/Colors";
 import RoundBtn from "@/components/RoundBtn";
 import DropDownList from "@/components/DropDownList";
+import { useBalanceStore } from "@/store/balanceStore";
+import { defaultStyles } from "@/constants/Styles";
+import { Ionicons } from "@expo/vector-icons";
 
 const home = () => {
-  const balance = 100;
+  const { balance, clearTransactions, runTransaction, transactions } =
+    useBalanceStore();
   const AddMoney = () => {
-    console.log("AddMoney");
+    runTransaction({
+      id: Math.random().toString(),
+      amount: Math.floor(Math.random() * 1000) * (Math.random() > 0.5 ? 1 : -1),
+      date: new Date(),
+      title: "Add Money",
+    });
   };
   return (
     <ScrollView style={{ backgroundColor: Colors.background }}>
@@ -22,14 +29,52 @@ const home = () => {
           }}
         >
           <Text style={styles.currency}>₹</Text>
-          <Text style={styles.balance}>{balance}</Text>
+          <Text style={styles.balance}>{balance()}</Text>
         </View>
       </View>
       <View style={styles.actionRow}>
         <RoundBtn icon={"add"} title={"Add Money"} onPress={AddMoney} />
-        <RoundBtn icon={"refresh"} title={"Exhange"} />
+        <RoundBtn
+          icon={"refresh"}
+          title={"Exhange"}
+          onPress={clearTransactions}
+        />
         <RoundBtn icon={"list"} title={"Details"} />
         <DropDownList />
+      </View>
+      <View style={styles.divider} />
+      <Text style={defaultStyles.sectionHeader}>Transactions</Text>
+      <View style={styles.transations}>
+        {transactions.length === 0 && (
+          <Text style={{ padding: 14, color: Colors.gray }}>
+            No Transactions
+          </Text>
+        )}
+        {transactions.map((transaction) => (
+          <View
+            key={transaction.id}
+            style={{
+              flexDirection: "row",
+              gap: 20,
+              alignItems: "center",
+            }}
+          >
+            <View style={styles.circle}>
+              <Ionicons
+                name={transaction.amount > 0 ? "add" : "remove"}
+                size={24}
+                color={Colors.dark}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: "800" }}>{transaction.title}</Text>
+              <Text style={{ color: Colors.gray, fontSize: 12 }}>
+                {transaction.date.toLocaleString()}
+              </Text>
+            </View>
+            <Text>₹{transaction.amount}</Text>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
@@ -50,6 +95,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 20,
+  },
+  transations: {
+    marginHorizontal: 20,
+    padding: 14,
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    gap: 20,
+  },
+  circle: {
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    backgroundColor: Colors.lightGray,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#e0e0e0", // Light gray color for the divider
+    marginVertical: 10,
   },
 });
 export default home;
