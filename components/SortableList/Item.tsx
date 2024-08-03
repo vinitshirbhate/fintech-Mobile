@@ -25,7 +25,7 @@ import {
   getPosition,
   Positions,
   SIZE,
-} from "./config";
+} from "./Config";
 
 interface ItemProps {
   children: ReactNode;

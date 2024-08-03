@@ -6,7 +6,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import Item from "./Item";
-import { COL, Positions, SIZE } from "./config";
+import { COL, Positions, SIZE } from "./Config";
 
 interface ListProps {
   children: ReactElement<{ id: string }>[];
