@@ -56,7 +56,7 @@ const home = () => {
             No Transactions
           </Text>
         )}
-        {transactions.map((transaction) => (
+        {[...transactions].reverse().map((transaction) => (
           <View
             key={transaction.id}
             style={{

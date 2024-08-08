@@ -74,7 +74,7 @@ const InitialLayout = () => {
     }
     const isAuthRoom = segmenets[0] === "(auth)";
     if (isSignedIn && !isAuthRoom) {
-      router.replace("/(auth)/(tabs)/home");
+      router.replace("/(auth)/(tabs)/crypto");
     } else if (!isSignedIn) {
       router.replace("/");
     }

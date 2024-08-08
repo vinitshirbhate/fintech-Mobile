@@ -11,16 +11,16 @@ const Layout = () => {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors.primary,
-        tabBarBackground: () => (
-          <BlurView
-            experimentalBlurMethod="dimezisBlurView"
-            intensity={100}
-            style={{
-              flex: 1,
-              backgroundColor: "rgba(0,0,0,0.05)",
-            }}
-          />
-        ),
+        // tabBarBackground: () => (
+        //   <BlurView
+        //     experimentalBlurMethod="dimezisBlurView"
+        //     intensity={100}
+        //     style={{
+        //       flex: 1,
+        //       backgroundColor: "rgba(0,0,0,0.05)",
+        //     }}
+        //   />
+        // ),
         tabBarStyle: {
           backgroundColor: "transparent",
           position: "absolute",

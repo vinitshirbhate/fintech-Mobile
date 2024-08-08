@@ -1,12 +1,25 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
-const home = () => {
+const crypto = () => {
+  useEffect(() => {
+    const listingCall = async () => {
+      try {
+        const res = await fetch("http://localhost:8081/api/listings");
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    listingCall();
+  }, []);
+
   return (
     <View>
-      <Text>home</Text>
+      <Text>crypto</Text>
     </View>
   );
 };
 
-export default home;
+export default crypto;
